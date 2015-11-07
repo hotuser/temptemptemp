@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DishSelect</title>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/png" href="assets/img/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>Light Bootstrap Dashboard by Creative Tim</title>
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<!-- Bootstrap core CSS     -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="assets/css/new.css" rel="stylesheet" />
+
+	<!-- Animation library for notifications   -->
+	<link href="assets/css/animate.min.css" rel="stylesheet"/>
+
+	<!--  Light Bootstrap Table core CSS    -->
+	<link href="assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
+
+
+	<!--  CSS for Demo Purpose, don't include it in your project     -->
+	<link href="assets/css/demo.css" rel="stylesheet" />
+
+
+	<!--     Fonts and icons     -->
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+	<link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+	<link rel="stylesheet" href="http://css-spinners.com/css/spinner/spinner.css" type="text/css">
+	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/tripledes.js"></script>
+	<script src="assets/js/jquery-1.10.2.js" type="text/javascript"></script>
+	
+	<script type="text/javascript" src="http://www.parsecdn.com/js/parse-latest.js"></script>
+	<script src="assets/js/main.js"></script>
+	<script src="assets/js/processing.js"></script>
+	<script src="assets/js/bootbox.min.js"></script>
+
+
+	<style  type="text/css">
+		body, p, div, tr, td{
+			font-family: 'Montserrat';
+		}
+		.inputButton, .inputButton:hover {
+			background : white !important;
+			color: black;
+		}
+
+	</style>
+	<script type="text/javascript">
+		var loggedInUser;
+		function getQueryParams(qs) {
+			qs = qs.split('+').join(' ');
+
+			var params = {},
+			tokens,
+			re = /[?&]?([^=]+)=([^&]*)/g;
+
+			while (tokens = re.exec(qs)) {
+				params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+			}
+
+			return params;
+		}
+
+		function checkUser(){
+			// var encrypted = getQueryParams(document.location.search).username;
+			// alert((encrypted));
+			// var decrypted = CryptoJS.AES.decrypt(encrypted, 'nfztteVV7MIntRi6XTYfXwmQsBiArdW0enG5XRon');
+			// decrypted.toString(CryptoJS.enc.Utf8);
+			// alert(decrypted);
+			// value = decrypted.split(':')[1];
+			try{
+				var username = getQueryParams(document.location.search).username.toString();
+				username = username.split(':');
+				value = username[1];
+				username = username[0];
+				if(value == 'true'){
+					loggedInUser = username;
+					return true;
+				}
+				else{
+					console.log("User not present");
+					return false;
+				}
+			}
+			catch(e){
+				window.location.href="index.html"
+			}
+		}
+		var decision = checkUser();
+		
+		if(decision == true){
+			loginUserForEmail(loggedInUser, function(){
+				notifySend("Welcome " + loggedInUser, 'info');
+				setUserName()
+			}, function(){
+				console.log("Something went wrong");
+			});
+		}
+
+	</script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="navbar navbar-inverse">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Grocery 2.0</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-left">
+					<li>
+						<a href="#" id="previousOrder" class="dropdown-toggle" data-toggle="dropdown">
+							See Previous Orders
+						</a>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<a href="#" id="username">Hello Username</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="container" style="padding: 0px !important; margin-left: 3% !important">
+
+			<!-- Main row dividing right and left part into columns -->
+			<div class="row">
+
+				<!-- The left column of dishes starts here -->
+				<div class="col-md-4" style="border-right: 1px solid grey; overflow-y: scroll" id="MainDishColumn">
+					<div class="card panel panel-default box-shadow--8dp" id="selectedDishes">
+						<table class="table table-hover table-striped  table-fixed" >
+							<thead>
+								<tr>
+									<th>
+										<b>Selected/Suggested Dishes</b>
+									</th>
+									<th>
+										<b>Servings</b>
+									</th>
+									<th>
+										<b>Remove Dish</b>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+					<div class="card panel panel-default box-shadow--8dp" id="availableDishes">
+						<table class="table table-hover table-striped">
+							<thead>
+								<tr>
+									<th>
+										<b>Available Dishes</b>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr >
+									<td align="center">
+										<div class="spinner-loader">
+											Loading…
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- The left column containing dishes ends here -->
+
+				<!-- Right side column containing vegetables, grocery and spices -->
+				<div class="col-md-8 border-bottom" style="overflow-y: scroll !important" id="MainQuantitiesColumn">
+
+					<!-- The general Modal used for all -->
+
+					<div class="modal fade" id="ingredientModal" role="dialog">
+						<div class="modal-dialog modal-md">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title" id="modalTitle">Select Ingredient Type</h4>
+								</div>
+								<div class="modal-body modalBody">
+									<div class="table-responsive">
+										<table id="mytable" class="table table-bordred table-striped">
+											<thead>
+												<tr>
+													<th width="10%">
+														<input type="checkbox" id="checkall">
+													</th>
+													<th>
+														Name
+													</th>
+												</tr>
+											</thead>
+											<tbody class="modalTableBody">
+												<tr>
+													<td width="10%"><input type="checkbox" class="checkthis"></td>
+													<td>Bhindi</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="clearfix"></div>
+									</div>
+								</div>
+								<div class="modal-footer" style="border:0">
+									<button type="button" class="btn btn-info selectIngredients" data-dismiss="modal">Select</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Vegetables Part start here -->
+					<div class="">
+						<h3 class="headingColor"><b>Vegetables</b></h3>
+					</div>
+					<div class="card panel panel-default box-shadow--8dp" id="vegetablesTable">
+						<table class="table table-bordered" >
+							<thead>
+								<tr>
+									<th width="15%">
+										<b>Keep</b>
+									</th>
+									<th width="55%">
+										<b>Item</b>
+									</th>
+									<th>
+										<b>Quantity</b>
+									</th>
+								</tr>
+								<tr>
+									<th width="25%" class="addNewItem" data-target="vegetablesModal">
+										<b>Add New Item <button type="button" class="btn btn-simple btn-xs openModal" data-toggle="modal" data-target="#ingredientModal"><i class="fa fa-plus text-right"></i></button></b>
+									</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- Vegetables part end here -->
+
+
+					<!-- Grocery Part starts here -->
+					<div class="">
+						<h3 class="headingColor"><b>Grocery</b> (remove items already in pantry)</h3>
+					</div>
+					<div class="card panel panel-default box-shadow--8dp" id="groceryTable">
+						<table class="table table-bordered" >
+							<thead>
+								<tr>
+									<th width="15%">
+										<b>Keep</b>
+									</th>
+									<th width="55%">
+										<b>Item</b>
+									</th>
+									<th class="noDisplay">
+										<b>Quantity</b>
+									</th>
+								</tr>
+								<tr>
+									<th width="25%" class="addNewItem" data-target="vegetablesModal">
+										<b>Add New Item <button type="button" class="btn btn-simple btn-xs openModal" data-toggle="modal" data-target="#ingredientModal"><i class="fa fa-plus text-right"></i></button></b>
+									</th>
+									<th class=""></th>
+									<th class="noDisplay"></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- Grocery part ends here -->
+
+
+					<!-- Spices part starts here -->
+					<div class="">
+						<h3 class="headingColor"><b>Spices</b> (remove items already in pantry)</h3>
+					</div>
+					<div class="card panel panel-default box-shadow--8dp" id="spicesTable">
+						<table class="table table-bordered" >
+							<thead>
+								<tr>
+									<th width="15%">
+										<b>Keep</b>
+									</th>
+									<th width="55%">
+										<b>Item</b>
+									</th>
+									<th class="noDisplay">
+										<b>Quantity</b>
+									</th>
+								</tr>
+								<tr>
+									<th width="25%" class="addNewItem" data-target="vegetablesModal">
+										<b>Add New Item <button type="button" class="btn btn-simple btn-xs openModal" data-toggle="modal" data-target="#ingredientModal"><i class="fa fa-plus text-right"></i></button></b>
+									</th>
+									<th class="noDisplay"></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- Spices part ends here -->
+					<div class="row" style="bottom: 0">
+						<div class="col-md-4">
+						</div>
+						<div class="col-md-5">
+							<div class="input-group">
+								<input type="text" class="form-control" id="comment" placeholder="Comments...">
+								<span class="input-group-btn">
+									<button class="btn btn-default inputButton" type="button" id="saveButton">Save Order!</button>
+								</span>
+							</div>
+						</div>
+
+						<div class="col-md-5">
+							
+						</div>
+					</div>
+				</div>
+				<!-- Right column ends here -->
+
+			</div>
+		</div>
+	</div>
+</body>
+<!--   Core JS Files   -->
+<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+
+<!--  Checkbox, Radio & Switch Plugins -->
+<script src="assets/js/bootstrap-checkbox-radio-switch.js"></script>
+
+<!--  Charts Plugin -->
+<script src="assets/js/chartist.min.js"></script>
+
+<!--  Notifications Plugin    -->
+<script src="assets/js/bootstrap-notify.js"></script>
+
+<!--  Google Maps Plugin    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="assets/js/light-bootstrap-dashboard.js"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="assets/js/demo.js"></script>
+
+
+<script type="text/javascript">
+	function basicResetting(){
+		var height = $(document).height() * 0.87;
+		$("#MainDishColumn").css({"height": height});
+		$("#MainQuantitiesColumn").css({"height": height});
+	}
+	basicResetting();
+	var isOrderPlaced = false;
+
+	$("#checkall").val('off');
+	$(document).on('click', '#saveButton', function(){
+		saveFinalOrderFromUser(function(){
+			setTimeout(function(){
+				window.location.href = "previousOrder.html";
+			}, 750);
+		});
+	});
+	var removeText = '<td class="td-actions text-right removeButton">' + '\n' + '<button data-original-title="Remove" type="button" rel="tooltip" class="btn btn-danger btn-simple btn-xs">' + '\n' + '<i class="fa fa-times cross"></i>' + '\n' + '</button>' + '\n' + '</td>';
+
+	var addText = '<td class="td-actions text-right addDishesButton">' + '\n' + '<button data-original-title="" type="button" rel="tooltip" class="btn btn-primary btn-xs">' + '\n' + '<i class="fa fa-plus"></i>' + '\n' + '</button>' + '\n' + '</td>';
+
+	var vegetablesItems = {};
+	var groceryItems = {};
+	var spicesItems = {};
+	var selectedItems = {};
+
+	startFunction(function(){
+		console.log(JSON.stringify(_allDishes));
+		var selectedDishes = document.getElementById('selectedDishes');
+		var tbodyElement = selectedDishes.getElementsByTagName('tbody')[0];
+		var trElement = tbodyElement.getElementsByTagName('tr');
+
+		for (var i = 0; i < trElement.length; i++) {
+			trElement[i].innerHTML += removeText;
+		}
+
+		var availableDishes = document.getElementById('availableDishes');
+		var tbodyElement = availableDishes.getElementsByTagName('tbody')[0];
+		var trElement = tbodyElement.getElementsByTagName('tr');
+
+		for (var i = 0; i < trElement.length; i++) {
+			trElement[i].innerHTML += addText;
+		}
+
+		showSuggestedDishes();
+
+		$(document).on('click', '.addDishesButton',function(e){
+			var text = $(this).parents('tr:first').text().trim();
+			console.log($(this).closest('tr').find('span').attr('value'))
+			var value = parseInt($(this).closest('tr').find('span').attr('value'));
+			var id = $(this).closest('tr').find('span').attr('id');
+			var $node = $(this).closest('tr');
+			if(selectedItems[text] != undefined){
+				$("#selectedDishes table tr td:nth-child(1)").each(function (i) {
+					var item = $(this).html().trim();
+					if (item == text){
+						// addMyDish(text);
+						console.log("Already Added");
+						notifySend('Already Added', 'warning');
+					}
+				});
+			}
+			else{
+				appendInSelectedDishes(text,value,id);
+				selectedItems[text] = true;
+				notifySend('Added Successfully', 'info');
+				addMyDish(text,1);
+				$node.css({"display": "none"});
+			}
+		});
+	});
+
+$(document).on('click', '.removeButton', function(e){
+	if($(this).hasClass('text-right')){
+		var text = $(this).closest('tr').find('td:nth-child(1)').html().trim();
+		var change = parseInt($(this).closest('tr').find('td:nth-child(2)').find('.servings').html().trim()); 
+		//Now just check once what to do with selectedItems
+		addMyDish(text,-1*change);
+	}
+	else{
+		var  id = $(this).closest('.card').attr('id');
+		id = id.replace('Table', '');
+		var name = $(this).closest('tr').find('.item').html().trim();
+		// alert(id + name);
+		eval(id + 'Items')[name] = undefined;
+	}
+
+	var $killrow = $(this).closest('tr');
+	var id = $(this).closest('tr').find('td:nth-child(1)').attr('id');
+	console.log(id);
+	removeFromArray($killrow);
+	
+	$killrow.fadeOut(200, function(){
+		$(this).remove();
+		$("#availableDishes #" + id).closest('tr').css({"display": ""});
+	});
+	notifySend('Removed Successfully', 'danger');
+});
+
+$(document).on('click', '.editButton', function(e){
+	var $node = $(this);
+	bootbox.prompt("Enter new value", function(result){
+		if(result == null){
+			console.log("No input given");
+			return ;
+		} else{
+			$node.parent().find('.amount').html(result);
+		}
+	});
+});
+
+var img = 0;
+
+$(document).on('click', '.changeServings', function(e){
+	var text = $(this).closest('tr').find('td:nth-child(1)').html().trim();
+	var $node = $(this).closest('td').find('.servings');
+	var change=0;
+	// try{
+		if($(this).hasClass('incrementServings')){
+			change=1;
+		}
+		else{
+			change = -1;
+		}
+	// }
+	// catch(e){}
+	console.log(change)
+	try{
+		var val = parseInt($node.html().trim()) + change;
+		if(val > 0){
+			$node.html(val);
+			selectedItems[text] = true;
+			addMyDish(text,change);
+		}
+	}
+	catch(e){
+		alert("Something went wrong..!!");
+	}
+});
+
+function setUserName(){
+	document.getElementById('username').innerHTML = '<span class="loggedInUserName">' + loggedInUser + '<span class="LOGOUT" style="text-decoration:underline"><b> Logout</b></span><span>';
+}
+
+$(document).on('click', '.LOGOUT', function(e){
+	
+	try{
+		Parse.User.logout();
+	}
+	catch(e){
+
+	}
+	notifySend("Thanks for using Grocery 2.0", 'warning');
+	setTimeout(function(){
+		window.location.href="index.html";
+	}, 2500);
+
+})
+$(document).on('click', '.openModal', function(e){
+
+	if($("#checkall").val() == 'on'){
+		$("#checkall").click();
+	}
+
+	var tableType = $(this).closest('div').attr('id');
+	var ingredient;
+	switch(tableType){
+		case 'vegetablesTable':
+		ingredient = 'Vegetables';
+		break;
+
+		case 'spicesTable':
+		ingredient = 'Spices';
+		break;
+
+		case 'groceryTable':
+		ingredient = 'Grocery';
+		break;
+	}
+
+	if(ingredient!=undefined){
+		var $node = $('#ingredientModal');
+		console.log("hell");
+			//Set title
+			$node.find('#modalTitle').html('Select ' + ingredient);
+			var quantities = getAllIngredientsArray(ingredient);
+			var modalContent = ""
+			for (var i = 0; i < quantities.length; i++) {
+				var name = quantities[i]['name'];
+				var id = quantities[i]['id'];
+				var unit = quantities[i]['unit'];
+				modalContent+='<tr>\n<td width="10%"><input type="checkbox" class="checkthis"></td>\n<td class="ingredientName" value="' + id + '" unit="' +unit + '"> ' + name + '</td>\n</tr>';
+			};
+			$('.modalTableBody').html(modalContent);
+			// display(quantities);
+		}
+	});
+
+$("#checkall").click(function(){
+	var onOrOff = $(this).val();
+	if(onOrOff == "off"){
+		$('.modalTableBody tr').find('.checkthis').click();
+		$(this).val('on');
+	}
+	else{
+		$(this).val('off');
+	}
+});
+
+
+$('.selectIngredients').click(function(){
+	var type = $('#modalTitle').html().trim();
+	type = type.replace('Select ', '').toLowerCase();
+	typeTable = type+ 'Table';
+
+	var $allInputs = $('.modalTableBody').find('input[type="checkbox"]:checked');
+	$allInputs.each(function () {
+		var ingredientName = $(this).closest('tr').find('td:nth-child(2)').html().trim();
+		var amount = 0;
+		var unitDisplayString = $(this).closest('tr').find('td:nth-child(2)').attr('unit');
+		var id = $(this).closest('tr').find('td:nth-child(2)').attr('value');
+		addIngredient({'ingredientName': ingredientName, 'amount': amount, 'unitDisplayString': unitDisplayString, 'id': id},eval(type+'Items'),typeTable, 0);
+
+	});
+});
+
+$(document).on('click', '#previousOrder', function(){
+	var orders = Parse.User.current().get('orders');
+	if(!orders || orders.length == 0){
+		alert("You have not ordered with us yet.");
+		return;
+	}
+	var id = orders[orders.length-1].id
+	window.location.href="lastOrder.html?orderId=" + id;
+})
+</script>
+</html>

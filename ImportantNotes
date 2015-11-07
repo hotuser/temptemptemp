@@ -1,0 +1,2 @@
+Make sure not to delete objects whose are present as pointers in other objects
+For saving anything, the user need to be logged in (the problem faced while saving user.html suggestions)

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+
+<body onkeypress="func()">
+<h1 id="heading"></h1>
+	<script type="text/javascript">
+		var count=-1;
+		document.addEventListener("keydown", func, false)
+		function func(e){
+			console.log(e.keyCode);
+			if(e.keyCode == 39){
+				count++;
+				document.body.style.backgroundImage = "url('" + count + ".png')";
+				document.getElementById('heading').innerHTML = count;	
+			}
+			else if(e.keyCode == 37){
+				if(count>0){
+					count--;
+					document.body.style.backgroundImage = "url('" + count + ".png')";
+				document.getElementById('heading').innerHTML = count;	
+				}
+				
+			}
+		}
+	</script>
+</body>
+</html>

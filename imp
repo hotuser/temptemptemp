@@ -1,0 +1,59 @@
+function getCompleteQuantitiyObject(id){
+	var QuantityClass = Parse.Object.extend("Quantity");
+	var query = new Parse.Query(QuantityClass);
+	query.get(id, {
+	 success: function(quantity) {
+	   // The object was retrieved successfully.
+	   console.log(quantity);
+	 },
+	 error: function(object, error) {
+	   // The object was not retrieved successfully.
+	   // error is a Parse.Error with an error code and message.
+	 }
+	});
+}
+
+
+function getCompleteSelectDishObject(id){
+	var SelectDishClass = Parse.Object.extend("SelectDish");
+	var query = new Parse.Query(SelectDishClass);
+	query.get(id, {
+	 success: function(quantity) {
+	   // The object was retrieved successfully.
+	   console.log(quantity);
+	 },
+	 error: function(object, error) {
+	   // The object was not retrieved successfully.
+	   // error is a Parse.Error with an error code and message.
+	 }
+	});
+}
+
+
+
+final->
+
+Scroll removing --------done
+User logging -----------done
+User logout ------------done
+Remove quantity from grocery and spices ----done
+Remove pencil icon from item name -------done
+
+Place order for user ----------remaining
+Show suggestion for user
+Try that 1000 limit part
+dishSelect prompt change (and verification)
+Add new dish
+
+User page
+	Show suggestion and past orders
+
+
+
+	.tableCell{
+	cursor: pointer;
+}
+$(document).on('click', '.tableCell', function(){
+	var id = $(this).find('span').attr('id');
+	window.location.href="lastOrder.html?orderId=" + id;
+})

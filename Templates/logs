@@ -1,0 +1,29 @@
+b5c4313 added id to the names in modal and right cloumn display
+93278ba bug fixes for adding new item which is already present
+3e0f763 done with dishSelect page, save order remaining
+75c6b2f add new ingredient added
+e210771 removing two functions with same name bug
+8a113ac added modals for add new item
+3ae6ce4 minor css changes
+1518472 changed servings model, added increment decrement feature
+071fc6a adding spices logic and minor improvements
+e5f4d71 added loading css
+25bb21c editing functionality added
+219938c added methods to update and delete dish
+087e6bb made admin page
+8525242 basic functionality ready, spicesTable remaining
+bf6eb6d problem with ingredient
+f005fdc successfully retrieved sample dishes and made final design
+4fa57c1 added vegetables, grocery and spices table
+d350a25 basic add remove functionality ready
+49094c2 started other pages and made changes as required
+6224275 necessary features added in home page
+b2fbd5e added some images
+9b5df99 new template added
+fb54b1e gitignore added
+af9342f added more methods and Method.txt file
+4e0c609 Making the static text of home screen
+d458e64 added methods for user
+a75c642 all dishes method change
+684c40f added more functions
+28fcf4d first commit

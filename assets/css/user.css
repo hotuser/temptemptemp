@@ -1,0 +1,19 @@
+#usersList{
+	height: 600px !important;
+	overflow: auto;
+}
+body {
+	background: url(../subtllePatterns/mooning/mooning.png);
+	/*background-repeat: no-repeat;*/
+	background-attachment: fixed;
+	/*background-size: cover;*/
+}
+.modalTableBody .checkthis {
+    cursor: pointer;
+}
+.noDisplay{
+	display: none;
+}
+.tableCell{
+	cursor: pointer;
+}
